@@ -1,103 +1,93 @@
-import Image from "next/image";
+"use client";
+import { ErrorMessage } from "./components/ui/ErrorMessage";
+import { StatusIndicator } from "./components/ui/StatusIndicator";
+// import { MainContent } from "./components/MainContent";
+import { VideoSidebar } from "./components/VideoSidebar";
+import { LoadingSpinner } from "./components/ui/LoadingSpinner";
+import { useFaceTracking } from "./hooks/useFaceTracking";
+import HowToUse from "./components/HowToUse";
+import { useState } from "react";
+import { VideoFeed } from "./components/VideoFeed";
+import { ControlButtons } from "./components/ControlButton";
+import { DetectionDetails } from "./components/DetectionDetails";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [HowToUseOpen, SetHowToUseOpen] = useState(false);
+  const {
+    videoRef,
+    canvasRef,
+    isDetecting,
+    isRecording,
+    isLoading,
+    modelsLoaded,
+    faceDetections,
+    recordedVideos,
+    isClient,
+    error,
+    downloadVideo,
+    deleteVideo,
+    clearError,
+    startCamera,
+    stopCamera,
+    startRecording,
+    stopRecording,
+  } = useFaceTracking();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white flex items-center justify-center">
+        <LoadingSpinner size="xl" text="Loading Face Tracking App..." />
+      </div>
+    );
+  }
+  return (
+    <div className="min-h-screen bg-black">
+      <ErrorMessage error={error} onDismiss={clearError} />
+      <StatusIndicator isLoading={isLoading} />
+      <div className=" min-h-screen flex flex-col">
+        <div className="flex gap-6 flex-1">
+          {/* video side */}
+          <div className="flex-1 shrink p-6 pr-0 bg-amber-900">
+            {/* Video Feed Component */}
+            <VideoFeed
+              videoRef={videoRef}
+              canvasRef={canvasRef}
+              isRecording={isRecording}
+              isDetecting={isDetecting}
+              modelsLoaded={modelsLoaded}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {/* Detection Details Component */}
+            <DetectionDetails faceDetections={faceDetections} />
+          </div>
+          <VideoSidebar
+            recordedVideos={recordedVideos}
+            onDownloadVideo={downloadVideo}
+            onDeleteVideo={deleteVideo}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div className="h-40 bg-gray-500 flex items-center justify-between w-[100vw]">
+          <div
+            onClick={() => SetHowToUseOpen(true)}
+            className="bg-white cursor-pointer rounded-full px-5 py-3"
+          >
+            How to use?
+          </div>
+          <ControlButtons
+            isDetecting={isDetecting}
+            isRecording={isRecording}
+            isLoading={isLoading}
+            modelsLoaded={modelsLoaded}
+            onStartCamera={startCamera}
+            onStopCamera={stopCamera}
+            onStartRecording={startRecording}
+            onStopRecording={stopRecording}
+            faceDetections={faceDetections}
+            recordedVideosCount={recordedVideos.length}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        </div>
+      </div>
+      <HowToUse open={HowToUseOpen} setOpen={SetHowToUseOpen} />
     </div>
   );
 }

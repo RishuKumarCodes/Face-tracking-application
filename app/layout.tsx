@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadats: Metadata = {
+export const metadata: Metadata = {
   title: "AI Face Tracker Pro",
   description:
     "Advanced face detection with facial landmarks using face-api.js",

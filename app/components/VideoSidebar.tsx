@@ -1,6 +1,6 @@
 import React from "react";
 import { Video } from "lucide-react";
-import { VideoCard } from "./VideoCard";
+import { VideoCard } from "./VideoCard.tsx";
 import { RecordedVideo } from "../types";
 
 interface VideoSidebarProps {

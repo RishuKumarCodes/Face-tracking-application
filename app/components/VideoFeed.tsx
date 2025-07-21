@@ -1,8 +1,8 @@
 import React, { RefObject, useEffect, useCallback } from "react";
 
 interface VideoFeedProps {
-  videoRef: RefObject<HTMLVideoElement>;
-  canvasRef: RefObject<HTMLCanvasElement>;
+  videoRef: RefObject<HTMLVideoElement | null>; 
+  canvasRef: RefObject<HTMLCanvasElement | null>; 
   isRecording: boolean;
   modelsLoaded: boolean;
   faceDetections: Array<{

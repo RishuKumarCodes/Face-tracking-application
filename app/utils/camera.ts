@@ -1,5 +1,4 @@
-// utils/camera.ts
-import { CameraStreamOptions } from '@/types';
+import { CameraStreamOptions } from '../types';
 
 export class CameraManager {
   private static stream: MediaStream | null = null;

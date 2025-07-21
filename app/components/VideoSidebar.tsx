@@ -1,7 +1,7 @@
-import React from 'react';
-import { Video } from 'lucide-react';
-import { RecordedVideo } from '@/types';
-import { VideoCard } from './VideoCard';
+import React from "react";
+import { Video } from "lucide-react";
+import { VideoCard } from "./VideoCard";
+import { RecordedVideo } from "../types";
 
 interface VideoSidebarProps {
   recordedVideos: RecordedVideo[];
@@ -15,8 +15,8 @@ export const VideoSidebar: React.FC<VideoSidebarProps> = ({
   onDeleteVideo,
 }) => {
   return (
-    <div className="bg-gray-800 rounded-xl p-6 shadow-2xl border border-gray-700">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+    <div className="bg-neutral-800 rounded-3xl mt-4 mr-4 h-[calc(100vh-135px)] overflow-auto w-[360px]">
+      <h2 className="text-lg font-semibold mb-6 p-6 flex items-center gap-2 text-white">
         <Video size={24} />
         Recorded Videos
       </h2>
@@ -30,7 +30,7 @@ export const VideoSidebar: React.FC<VideoSidebarProps> = ({
           </p>
         </div>
       ) : (
-        <div className="space-y-4 max-h-96 overflow-y-auto">
+        <div className="">
           {recordedVideos.map((video) => (
             <VideoCard
               key={video.id}

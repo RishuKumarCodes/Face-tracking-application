@@ -1,22 +1,19 @@
-// components/ui/ErrorMessage.tsx
 import React from "react";
 
 interface ErrorMessageProps {
   error: string;
   onDismiss?: () => void;
-  className?: string;
 }
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   error,
   onDismiss,
-  className = "",
 }) => {
   if (!error) return null;
 
   return (
     <div
-      className={`bg-red-600 text-white p-4 rounded-lg mb-6 border-l-4 border-red-400 ${className}`}
+      className={`bg-red-600 text-white p-4 rounded-lg mb-6 border-l-4 border-red-400 absolute z-50 w-[90%] mx-[5%] my-5`}
     >
       <div className="flex items-center justify-between">
         <div>

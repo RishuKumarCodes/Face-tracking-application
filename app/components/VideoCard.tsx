@@ -1,7 +1,6 @@
-// components/VideoCard.tsx
 import React from "react";
 import { Download, Trash2, Play } from "lucide-react";
-import { RecordedVideo } from "@/types";
+import { RecordedVideo } from "../types";
 
 interface VideoCardProps {
   video: RecordedVideo;
@@ -19,11 +18,11 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div className="bg-gray-700 rounded-lg p-4 hover:bg-gray-650 transition-colors">
+    <div className="p-6 transition-colors border-b border-b-neutral-600 ">
       <div className="relative group mb-3">
         <video
           src={video.url}
-          className="w-full h-32 bg-black rounded object-cover"
+          className="w-full bg-black object-cover rounded-xl aspect-video px-25"
           poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M8 5v14l11-7z'/%3E%3C/svg%3E"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded">
@@ -51,7 +50,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
         <div className="flex gap-2 pt-2">
           <button
             onClick={() => onDownload(video)}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors font-medium"
+            className="text-white flex-1 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-full text-sm flex items-center justify-center gap-2 transition-colors font-medium cursor-pointer"
             title="Download video"
           >
             <Download size={16} />
@@ -59,10 +58,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
           </button>
           <button
             onClick={() => onDelete(video.id)}
-            className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded text-sm flex items-center justify-center transition-colors"
+            className="text-red-400 hover:bg-red-700 hover:text-white px-3 py-2 rounded-full text-sm flex items-center justify-center transition-colors"
             title="Delete video"
           >
-            <Trash2 size={16} />
+            <Trash2 size={18} />
           </button>
         </div>
       </div>

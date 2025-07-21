@@ -1,5 +1,4 @@
-// utils/faceDetection.ts
-import { FaceDetection, FaceApiDetection } from '@/types';
+import { FaceDetection, FaceApiDetection } from '../types';
 
 export class FaceDetector {
   public static async detectFaces(
@@ -28,7 +27,7 @@ export class FaceDetector {
       const ctx = canvas.getContext('2d');
       if (!ctx) return [];
       
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (detections && detections.length > 0) {
         // Resize detections to fit canvas
@@ -83,22 +82,12 @@ export class FaceDetector {
     ctx.lineWidth = 3;
     ctx.strokeRect(x, y, width, height);
 
-    // Corner markers
     this.drawCornerMarkers(ctx, x, y, width, height);
-
-    // Center crosshair
     this.drawCenterCrosshair(ctx, x, y, width, height);
-
     // Face landmarks
     this.drawLandmarks(ctx, landmarks);
-
-    // Face label and info
     this.drawFaceLabel(ctx, x, y, width, confidence, id);
-
-    // Confidence bar
     this.drawConfidenceBar(ctx, x, y, width, height, confidence);
-
-    // ID badge
     this.drawIdBadge(ctx, x, y, width, id);
   }
 

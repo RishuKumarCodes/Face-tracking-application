@@ -1,4 +1,3 @@
-// utils/faceApi.ts
 declare global {
   interface Window {
     faceapi: any;

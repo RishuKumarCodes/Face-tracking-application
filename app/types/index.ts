@@ -1,4 +1,3 @@
-// types/index.ts
 export interface FaceDetection {
   id: number;
   x: number;

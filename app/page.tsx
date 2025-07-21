@@ -1,18 +1,16 @@
 "use client";
 import { ErrorMessage } from "./components/ui/ErrorMessage";
-import { StatusIndicator } from "./components/ui/StatusIndicator";
-// import { MainContent } from "./components/MainContent";
 import { VideoSidebar } from "./components/VideoSidebar";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { useFaceTracking } from "./hooks/useFaceTracking";
 import HowToUse from "./components/HowToUse";
 import { useState } from "react";
 import { VideoFeed } from "./components/VideoFeed";
-import { ControlButtons } from "./components/ControlButton";
-import { DetectionDetails } from "./components/DetectionDetails";
+import { Controls } from "./components/Controls";
 
 export default function Home() {
-  const [HowToUseOpen, SetHowToUseOpen] = useState(false);
+  const [howToUseOpen, setHowToUseOpen] = useState(false);
+  const [showRecordings, setShowRecordings] = useState(false);
   const {
     videoRef,
     canvasRef,
@@ -40,54 +38,47 @@ export default function Home() {
       </div>
     );
   }
+
+  // console.log(faceDetections);
   return (
     <div className="min-h-screen bg-black">
-      <ErrorMessage error={error} onDismiss={clearError} />
-      <StatusIndicator isLoading={isLoading} />
       <div className=" min-h-screen flex flex-col">
-        <div className="flex gap-6 flex-1">
-          {/* video side */}
-          <div className="flex-1 shrink p-6 pr-0 bg-amber-900">
-            {/* Video Feed Component */}
-            <VideoFeed
-              videoRef={videoRef}
-              canvasRef={canvasRef}
-              isRecording={isRecording}
-              isDetecting={isDetecting}
-              modelsLoaded={modelsLoaded}
-            />
-            {/* Detection Details Component */}
-            <DetectionDetails faceDetections={faceDetections} />
-          </div>
-          <VideoSidebar
-            recordedVideos={recordedVideos}
-            onDownloadVideo={downloadVideo}
-            onDeleteVideo={deleteVideo}
-          />
-        </div>
-        <div className="h-40 bg-gray-500 flex items-center justify-between w-[100vw]">
-          <div
-            onClick={() => SetHowToUseOpen(true)}
-            className="bg-white cursor-pointer rounded-full px-5 py-3"
-          >
-            How to use?
-          </div>
-          <ControlButtons
-            isDetecting={isDetecting}
-            isRecording={isRecording}
+        <ErrorMessage error={error} onDismiss={clearError} />
+        <div className="flex flex-1 items-center justify-center">
+          <VideoFeed
             isLoading={isLoading}
+            videoRef={videoRef}
+            canvasRef={canvasRef}
+            isRecording={isRecording}
             modelsLoaded={modelsLoaded}
-            onStartCamera={startCamera}
-            onStopCamera={stopCamera}
-            onStartRecording={startRecording}
-            onStopRecording={stopRecording}
             faceDetections={faceDetections}
-            recordedVideosCount={recordedVideos.length}
           />
-
+          {showRecordings && (
+            <VideoSidebar
+              recordedVideos={recordedVideos}
+              onDownloadVideo={downloadVideo}
+              onDeleteVideo={deleteVideo}
+            />
+          )}
         </div>
+
+        <Controls
+          showRecordings={showRecordings}
+          setShowRecordings={setShowRecordings}
+          SetHowToUseOpen={setHowToUseOpen}
+          isDetecting={isDetecting}
+          isRecording={isRecording}
+          isLoading={isLoading}
+          modelsLoaded={modelsLoaded}
+          onStartCamera={startCamera}
+          onStopCamera={stopCamera}
+          onStartRecording={startRecording}
+          onStopRecording={stopRecording}
+          faceDetections={faceDetections}
+          recordedVideosCount={recordedVideos.length}
+        />
       </div>
-      <HowToUse open={HowToUseOpen} setOpen={SetHowToUseOpen} />
+      <HowToUse open={howToUseOpen} setOpen={setHowToUseOpen} />
     </div>
   );
 }

@@ -1,10 +1,9 @@
-// hooks/useFaceTracking.ts
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { FaceTrackingState, FaceDetection, RecordedVideo } from '../types';
-import { FaceApiLoader } from '../utils/faceApi';
-import { FaceDetector } from '../utils/faceDetection';
-import { CameraManager } from '../utils/camera';
-import { RecordingManager, VideoManager } from '../utils/recording';
+import { useState, useRef, useEffect, useCallback } from "react";
+import { FaceTrackingState, FaceDetection, RecordedVideo } from "../types";
+import { FaceDetector } from "../utils/faceDetection";
+import { CameraManager } from "../utils/camera";
+import { RecordingManager, VideoManager } from "../utils/recording";
+import { FaceApiLoader } from "../utils/FaceApi";
 
 export const useFaceTracking = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,37 +17,36 @@ export const useFaceTracking = () => {
     isDetecting: false,
     recordedVideos: [],
     faceDetections: [],
-    error: '',
+    error: "",
     isLoading: false,
     modelsLoaded: false,
   });
 
-  // Ensure client-side rendering
   useEffect(() => {
-    setState(prev => ({ ...prev, isClient: true }));
+    setState((prev) => ({ ...prev, isClient: true }));
   }, []);
 
-  // Load face-api.js models
   useEffect(() => {
     if (!state.isClient) return;
 
     const loadModels = async () => {
       try {
-        setState(prev => ({ ...prev, isLoading: true, error: '' }));
-        
+        setState((prev) => ({ ...prev, isLoading: true, error: "" }));
+
         const faceApiLoader = FaceApiLoader.getInstance();
         await faceApiLoader.loadModels();
-        
-        setState(prev => ({ 
-          ...prev, 
-          modelsLoaded: true, 
-          isLoading: false 
+
+        setState((prev) => ({
+          ...prev,
+          modelsLoaded: true,
+          isLoading: false,
         }));
       } catch (error) {
-        console.error('Error loading face-api.js models:', error);
-        setState(prev => ({
+        console.error("Error loading face-api.js models:", error);
+        setState((prev) => ({
           ...prev,
-          error: 'Failed to load face detection models. Please refresh the page.',
+          error:
+            "Failed to load face detection models. Please refresh the page.",
           isLoading: false,
         }));
       }
@@ -68,10 +66,10 @@ export const useFaceTracking = () => {
         videoRef.current,
         canvasRef.current
       );
-      
-      setState(prev => ({ ...prev, faceDetections: detections }));
+
+      setState((prev) => ({ ...prev, faceDetections: detections }));
     } catch (error) {
-      console.error('Face detection error:', error);
+      console.error("Face detection error:", error);
     }
   }, [state.modelsLoaded]);
 
@@ -103,12 +101,11 @@ export const useFaceTracking = () => {
     };
   }, [state.isDetecting, state.modelsLoaded, startFaceDetection]);
 
-  // Start camera
   const startCamera = async (): Promise<void> => {
     if (!state.modelsLoaded) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
-        error: 'Face detection models are still loading. Please wait...',
+        error: "Face detection models are still loading. Please wait...",
       }));
       return;
     }
@@ -118,123 +115,180 @@ export const useFaceTracking = () => {
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+
         videoRef.current.onloadedmetadata = () => {
-          setState(prev => ({ ...prev, isDetecting: true, error: '' }));
+          setState((prev) => ({ ...prev, isDetecting: true, error: "" }));
+        };
+
+        videoRef.current.onerror = (error) => {
+          console.error("Video error:", error);
+          setState((prev) => ({
+            ...prev,
+            error: "Video playback error occurred.",
+          }));
         };
       }
     } catch (error) {
-      setState(prev => ({
+      console.error("Camera start error:", error);
+      setState((prev) => ({
         ...prev,
-        error: 'Failed to access camera. Please ensure camera permissions are granted.',
+        error:
+          "Failed to access camera. Please ensure camera permissions are granted.",
       }));
     }
   };
 
-  // Stop camera
   const stopCamera = (): void => {
     CameraManager.stopCamera();
-    
+
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
-    
-    setState(prev => ({ ...prev, isDetecting: false }));
-    
+
+    setState((prev) => ({ ...prev, isDetecting: false }));
+
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
-    
+
     if (state.isRecording) {
       stopRecording();
     }
   };
 
-  // Start recording
   const startRecording = async (): Promise<void> => {
     try {
       if (!videoRef.current || !canvasRef.current) {
-        setState(prev => ({ ...prev, error: 'Camera not ready' }));
+        setState((prev) => ({ ...prev, error: "Camera not ready" }));
         return;
       }
+
+      // Check if video is properly loaded
+      if (videoRef.current.readyState < 2) {
+        setState((prev) => ({
+          ...prev,
+          error:
+            "Video not ready for recording. Please wait for camera to fully load.",
+        }));
+        return;
+      }
+
+      // Check MediaRecorder support
+      if (!window.MediaRecorder) {
+        setState((prev) => ({
+          ...prev,
+          error: "Recording not supported in this browser.",
+        }));
+        return;
+      }
+
+      // console.log('Starting recording with video dimensions:', {
+      //   videoWidth: videoRef.current.videoWidth,
+      //   videoHeight: videoRef.current.videoHeight,
+      //   canvasWidth: canvasRef.current.width,
+      //   canvasHeight: canvasRef.current.height,
+      // });
 
       await recordingManagerRef.current.startRecording(
         videoRef.current,
         canvasRef.current
       );
-      
-      setState(prev => ({ ...prev, isRecording: true, error: '' }));
+
+      setState((prev) => ({ ...prev, isRecording: true, error: "" }));
+      // console.log('Recording started successfully');
     } catch (error) {
-      setState(prev => ({
+      console.error("Recording start error:", error);
+      setState((prev) => ({
         ...prev,
-        error: `Failed to start recording: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        error: `Failed to start recording: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       }));
     }
   };
 
-  // Stop recording
   const stopRecording = async (): Promise<void> => {
-    if (!recordingManagerRef.current.isCurrentlyRecording()) return;
+    if (!recordingManagerRef.current.isCurrentlyRecording()) {
+      console.warn("No active recording to stop");
+      return;
+    }
 
     try {
+      // console.log('Stopping recording...');
       const newVideo = await recordingManagerRef.current.stopRecording();
-      
-      setState(prev => ({
+
+      // Test video playability
+      const isPlayable = await VideoManager.testVideoPlayability(newVideo);
+      if (!isPlayable) {
+        console.warn("Generated video may not be playable");
+      }
+
+      // console.log('Recording stopped successfully:', {
+      //   size: newVideo.size,
+      //   name: newVideo.name,
+      //   isPlayable
+      // });
+
+      setState((prev) => ({
         ...prev,
         isRecording: false,
         recordedVideos: [...prev.recordedVideos, newVideo],
+        error: isPlayable ? "" : "Video recorded but may have playback issues.",
       }));
     } catch (error) {
-      setState(prev => ({
+      console.error("Recording stop error:", error);
+      setState((prev) => ({
         ...prev,
-        error: `Failed to stop recording: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        error: `Failed to stop recording: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
         isRecording: false,
       }));
     }
   };
 
-  // Download video
   const downloadVideo = (video: RecordedVideo): void => {
-    VideoManager.downloadVideo(video);
+    try {
+      VideoManager.downloadVideo(video);
+    } catch (error) {
+      console.error("Download error:", error);
+      setState((prev) => ({
+        ...prev,
+        error: "Failed to download video.",
+      }));
+    }
   };
 
-  // Delete video
   const deleteVideo = (videoId: number): void => {
-    setState(prev => {
-      const video = prev.recordedVideos.find(v => v.id === videoId);
+    setState((prev) => {
+      const video = prev.recordedVideos.find((v) => v.id === videoId);
       if (video) {
         VideoManager.revokeVideoUrl(video);
       }
       return {
         ...prev,
-        recordedVideos: prev.recordedVideos.filter(v => v.id !== videoId),
+        recordedVideos: prev.recordedVideos.filter((v) => v.id !== videoId),
       };
     });
   };
 
-  // Clear error
   const clearError = (): void => {
-    setState(prev => ({ ...prev, error: '' }));
+    setState((prev) => ({ ...prev, error: "" }));
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopCamera();
-      state.recordedVideos.forEach(video => {
+      state.recordedVideos.forEach((video) => {
         VideoManager.revokeVideoUrl(video);
       });
     };
   }, []);
 
   return {
-    // Refs
     videoRef,
     canvasRef,
-    
-    // State
     ...state,
-    
-    // Actions
     startCamera,
     stopCamera,
     startRecording,

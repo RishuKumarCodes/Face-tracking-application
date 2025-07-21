@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+[![Live Demo](./public/hostedSiteLink.png)](https://your-demo-link.com)
 
-First, run the development server:
+> 👆 Click the image above to view the live demo of the app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Face Tracking Application
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Real-time **facial landmark detection**
+- **Multi-face tracking** with unique IDs
+- **Video recording** with face detection overlays
+- **Download recorded videos** for offline viewing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Bug in this app:
 
-To learn more about Next.js, take a look at the following resources:
+> ❗ During video preview, the canvas does **not display face labels** correctly.  
+However, **after downloading**, the video shows proper face detection overlays.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🖼️ Preview
+- live detection on face and recording video
+  
+![App Screenshot](./public/appScreenshot.png)
 
-## Deploy on Vercel
+- downloaded video file from recording.
+  
+![App Screenshot](./public/download.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Tech Stack
+
+- **Frontend**: React, Next.js
+- **Face Detection**: [face-api.js](https://github.com/justadudewhohacks/face-api.js)
+- **Deployment**: Vercel
+
+---

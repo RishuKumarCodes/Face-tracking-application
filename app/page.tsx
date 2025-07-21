@@ -1,8 +1,8 @@
 "use client";
-import { ErrorMessage } from "./components/ui/ErrorMessage.tsx";
-import { LoadingSpinner } from "./components/ui/LoadingSpinner.tsx";
-import { useFaceTracking } from "./hooks/useFaceTracking.ts";
-import HowToUse from "./components/HowToUse.tsx";
+import { ErrorMessage } from "./components/ui/ErrorMessage";
+import { LoadingSpinner } from "./components/ui/LoadingSpinner";
+import { useFaceTracking } from "./hooks/useFaceTracking";
+import HowToUse from "./components/HowToUse";
 import { useState } from "react";
 import { VideoFeed } from "./components/VideoFeed";
 import { Controls } from "./components/Controls";

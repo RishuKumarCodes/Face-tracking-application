@@ -1,5 +1,5 @@
 
-[![Live Demo](./public/hostedSiteLink.png)](https://your-demo-link.com)
+[![Live Demo](./public/hostedSiteLink.png)](https://face-tracking-application-6lcb.vercel.app/)
 
 > 👆 Click the image above to view the live demo of the app.
 

@@ -11,12 +11,12 @@ function HowToUse({ open, setOpen }: HowToUseProps) {
 
   const handleClose = () => setOpen(false);
 
-  const handleBackdropClick = (e) => {
-    if (e.target.id === "popup-backdrop") {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.id === "popup-backdrop") {
       handleClose();
     }
   };
-
   return (
     <div
       id="popup-backdrop"

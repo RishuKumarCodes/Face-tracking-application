@@ -1,12 +1,12 @@
 "use client";
 import { ErrorMessage } from "./components/ui/ErrorMessage.tsx";
-import { VideoSidebar } from "./components/VideoSidebar.tsx";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner.tsx";
 import { useFaceTracking } from "./hooks/useFaceTracking.ts";
 import HowToUse from "./components/HowToUse.tsx";
 import { useState } from "react";
 import { VideoFeed } from "./components/VideoFeed";
 import { Controls } from "./components/Controls";
+import { VideoSidebar } from "./components/VideoSidebar";
 
 export default function Home() {
   const [howToUseOpen, setHowToUseOpen] = useState(false);

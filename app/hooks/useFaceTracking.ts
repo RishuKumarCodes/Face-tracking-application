@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { FaceTrackingState, FaceDetection, RecordedVideo } from "../types";
 import { FaceDetector } from "../utils/faceDetection";
 import { CameraManager } from "../utils/camera";
-import { RecordingManager, VideoManager } from "../utils/recording";
-import { FaceApiLoader } from "../utils/FaceApi";
+import { RecordingManager, VideoManager } from "../utils/recording.ts";
+import { FaceApiLoader } from "../utils/FaceApi.tsx";
 
 export const useFaceTracking = () => {
   const videoRef = useRef<HTMLVideoElement>(null);

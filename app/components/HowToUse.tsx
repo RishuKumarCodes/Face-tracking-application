@@ -1,7 +1,12 @@
 import React from "react";
 import { X, Eye, Video, Download, Zap, Settings } from "lucide-react";
 
-function HowToUse({ open, setOpen }) {
+interface HowToUseProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function HowToUse({ open, setOpen }: HowToUseProps) {
   if (!open) return null;
 
   const handleClose = () => setOpen(false);
